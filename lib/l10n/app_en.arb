@@ -1,0 +1,55 @@
+{
+    "language" : "Language" ,
+    "english" : "English" ,
+    "arabic" : "Arabic",
+    "theme" : "Theme",
+    "dark" : "Dark",
+    "light" : "Light",
+    "dark_mode" : "Dark Mode",
+    "logout" : "Logout",
+    "home" : "Home",
+    "favorite" : "Favorite",
+    "profile" : "Profile",
+    "login_to_your_account" : "Login To Your Account",
+    "enter_your_email" : "Enter Your Email",
+    "enter_your_password" : "Enter Your Password",
+    "forget_password" : "Forget Password",
+    "login" : "Login",
+    "don_t_have_an_account" : "Don’t have an account",
+    "login_with_google" : "Login with Google",
+    "create_your_account" : "Create your Account",
+    "sign_up" : "Sign up",
+    "or" : "Or",
+    "enter_your_name" : "Enter Your Name",
+    "enter_your_rePassword" : "Confirm Your Password",
+    "already_have_an_account" : "Already have an account",
+    "reset_password" : "Reset password",
+    "sport" : "Sport",
+    "all" : "All",
+    "birthday" : "Birthday",
+    "welcome_Back" : "Welcome Back ✨",
+    "meeting" : "’Meeting",
+    "book_club" : "Book Club",
+    "exhibition" : "’Exhibition",
+    "search_event" : "Search Event",
+    "let_s_start" : "Let's start",
+    "get_started" : "Get started",
+    "next" : "Next",
+    "introTitle1": "Personalize Your Experience",
+    "introTitle2": "Find Events That Inspire You",
+    "introTitle3": "Effortless Event Planning",
+    "introTitle4": "Connect with Friends & Share Moments",
+    "introDesc1": "Choose your preferred theme and language to get started with a comfortable, tailored experience that suits your style.",
+    "introDesc2": "Dive into a world of events crafted to fit your unique interests. Whether you're into live music, art workshops, professional networking, or simply discovering new experiences, we have something for everyone. Our curated recommendations will help you explore, connect, and make the most of every opportunity around you.",
+    "introDesc3": "Take the hassle out of organizing events with our all-in-one planning tools. From setting up invites and managing RSVPs to scheduling reminders and coordinating details, we've got you covered. Plan with ease and focus on what matters – creating an unforgettable experience for you and your guests.",
+    "introDesc4": "Make every event memorable by sharing the experience with others. Our platform lets you invite friends, keep everyone in the loop, and celebrate moments together. Capture and share the excitement with your network, so you can relive the highlights and cherish the memories.",
+    "sign_up_with_google" : "Sign up with Google",
+    "meeting_for_updating_the_development_method" : "Meeting for Updating The Development Method "
+
+
+
+
+
+
+
+}
