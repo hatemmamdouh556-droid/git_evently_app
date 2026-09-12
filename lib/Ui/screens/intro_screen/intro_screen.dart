@@ -42,7 +42,7 @@ class _IntroScreenState extends State<IntroScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      Navigator.of(context).pushNamed(AppRoutes.homeRouteNamed);
+      Navigator.of(context).pushNamed(AppRoutes.loginRouteNamed);
     }
   }
 
