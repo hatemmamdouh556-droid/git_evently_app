@@ -22,6 +22,8 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool? obscureText;
   final int? maxLines;
+  final bool? filled;
+  final Color? fillColor;
   final String? obscuringCharacter;
 
   const CustomTextField({
@@ -42,6 +44,8 @@ class CustomTextField extends StatelessWidget {
     this.obscureText,
     this.maxLines,
     this.obscuringCharacter,
+    this.filled,
+    this.fillColor,
     KeybordTtype,
   });
 
@@ -74,6 +78,8 @@ class CustomTextField extends StatelessWidget {
         labelStyle: labelStyle,
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
+        filled: filled,
+        fillColor:fillColor ,
       ),
     );
   }

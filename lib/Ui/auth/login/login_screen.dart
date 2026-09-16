@@ -7,17 +7,25 @@ import 'package:evently_project/utils/AppColors.dart';
 import 'package:evently_project/utils/AppStyles.dart';
 import 'package:evently_project/utils/app_routes.dart';
 import 'package:evently_project/utils/size_utils.dart';
+import 'package:evently_project/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
    LoginScreen({super.key});
-   var  emailController = TextEditingController();
-   var  passwordController = TextEditingController();
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+   var  emailController = TextEditingController(text: 'hatem@gmail.com');
+
+   var  passwordController = TextEditingController(text: '123456');
+
    var formKey = GlobalKey<FormState>();
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +70,7 @@ class LoginScreen extends StatelessWidget {
                       final bool emailValid =
                       RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                           .hasMatch(text);
-          
+
                       if(!emailValid){
                         return 'please Enter valid email.';
                       }
@@ -113,7 +121,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   CustomElevatedBotton(
                     onPressed: (){
-                      Navigator.of(context).pushNamed(AppRoutes.homeRouteNamed);
+                      ///Navigator.of(context).pushNamed(AppRoutes.homeRouteNamed);
                     },
                     child: Text(
                       AppLocalizations.of(context)!.login,
@@ -156,7 +164,7 @@ class LoginScreen extends StatelessWidget {
                           thickness: 2,
                           indent: width*0.06,
                           endIndent: width*0.02,
-          
+
                         ),
                       ),
                     ],
@@ -190,10 +198,41 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  void login() {
+  void login()async {
     //todo : login , navigate to home  screen
     if(formKey.currentState?.validate() == true){
+      try {
+        final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: emailController.text,
+            password: passwordController.text
+        );
+        ToastUtils.toastMsg(
+            msg: 'login successfully.',
+            backgroundColor: Theme.of(context).cardColor,
+            textColor: AppColors.whiteColor,
+            gravity:ToastGravity.BOTTOM);
 
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'invalid-credential') {
+          ToastUtils.toastMsg(
+              msg: 'the email or password is incorrect.',
+              backgroundColor: AppColors.redColor,
+              textColor: AppColors.whiteColor,
+              gravity:ToastGravity.BOTTOM);
+        } else if (e.code == 'network-request-failed') {
+          ToastUtils.toastMsg(
+              msg: 'No internet connection.',
+              backgroundColor: AppColors.redColor,
+              textColor: AppColors.whiteColor,
+              gravity:ToastGravity.BOTTOM);
+        }
+      }catch(e){
+        ToastUtils.toastMsg(
+            msg: e.toString(),
+            backgroundColor: AppColors.redColor,
+            textColor: AppColors.whiteColor,
+            gravity:ToastGravity.BOTTOM);
+      }
     }
-  }
+}
 }

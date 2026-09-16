@@ -97,7 +97,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcome_Back => 'Welcome Back ✨';
 
   @override
-  String get meeting => '’Meeting';
+  String get meeting => 'Meeting';
 
   @override
   String get book_club => 'Book Club';
@@ -147,6 +147,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sign_up_with_google => 'Sign up with Google';
+
+  @override
+  String get add_event => 'Add Event';
+
+  @override
+  String get title => 'Title';
+
+  @override
+  String get event_title => 'Event Title';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get event_description => 'Event Description....';
+
+  @override
+  String get event_date => 'Event Date';
+
+  @override
+  String get event_time => 'Event Time';
+
+  @override
+  String get choose_date => 'Choose date';
+
+  @override
+  String get choose_time => 'Choose time';
 
   @override
   String get meeting_for_updating_the_development_method =>

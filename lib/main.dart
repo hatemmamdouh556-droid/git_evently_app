@@ -1,17 +1,26 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evently_project/Ui/Add_event/add_event_screen.dart';
 import 'package:evently_project/Ui/auth/login/login_screen.dart';
 import 'package:evently_project/Ui/auth/register/register_screen.dart';
 import 'package:evently_project/Ui/screens/home/home_screen.dart';
 import 'package:evently_project/Ui/screens/home/tabs/profile/widgets/app_theme.dart';
 import 'package:evently_project/Ui/screens/intro_screen/intro_screen.dart';
+import 'package:evently_project/firebase_options.dart';
 import 'package:evently_project/l10n/app_localizations.dart';
 import 'package:evently_project/providers/app_language_provider.dart';
 import 'package:evently_project/providers/app_theme_provider.dart';
 import 'package:evently_project/utils/app_routes.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-void main(){
+void main()async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,);
+  //todo : offline
+  // FirebaseFirestore.instance.disableNetwork();
   runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) =>AppLanguageProvider() ,),
@@ -27,12 +36,15 @@ class MyApp extends StatelessWidget{
     var themeProvider =Provider.of<AppThemeProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.introRouteNamed,
+      initialRoute: AppRoutes.loginRouteNamed,
       routes: {
         AppRoutes.introRouteNamed : (context) => IntroScreen(),
         AppRoutes.homeRouteNamed : (context) => HomeScreen(),
         AppRoutes.loginRouteNamed : (context) => LoginScreen(),
         AppRoutes.registerRouteNamed : (context) => RegisterScreen(),
+        AppRoutes.addEventRouteNamed : (context) => AddEventScreen(),
+
+
 
       },
       localizationsDelegates: AppLocalizations.localizationsDelegates,

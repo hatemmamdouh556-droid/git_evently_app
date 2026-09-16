@@ -58,7 +58,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get login => 'تسجيل الدخول';
 
   @override
-  String get don_t_have_an_account => 'Don’t have an account';
+  String get don_t_have_an_account => 'ليس لديك حساب؟';
 
   @override
   String get login_with_google => 'تسجيل الدخول باستخدام Google';
@@ -147,6 +147,33 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get sign_up_with_google => 'التسجيل باستخدام Google';
+
+  @override
+  String get add_event => 'اضافه حدث';
+
+  @override
+  String get title => 'عنوان';
+
+  @override
+  String get event_title => 'عنوان الفعالية';
+
+  @override
+  String get description => 'الوصف';
+
+  @override
+  String get event_description => '...وصف الفعالية';
+
+  @override
+  String get event_date => 'تاريخ الفعالبه';
+
+  @override
+  String get event_time => 'وقت الفعالية';
+
+  @override
+  String get choose_date => 'اختر التاريخ';
+
+  @override
+  String get choose_time => 'ختر الوقت';
 
   @override
   String get meeting_for_updating_the_development_method =>

@@ -6,16 +6,28 @@ import 'package:evently_project/utils/AppAssets.dart';
 import 'package:evently_project/utils/AppColors.dart';
 import 'package:evently_project/utils/AppStyles.dart';
 import 'package:evently_project/utils/size_utils.dart';
+import 'package:evently_project/utils/toast_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
 
-  var passwordController = TextEditingController();
-  var nameController = TextEditingController();
-  var emailController = TextEditingController();
-  var rePasswordController = TextEditingController();
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  var passwordController = TextEditingController(text: '123456');
+
+  var nameController = TextEditingController(text: 'hatem');
+
+  var emailController = TextEditingController(text: 'hatem@gmail.com');
+
+  var rePasswordController = TextEditingController(text: '12345');
+
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -222,8 +234,48 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 
-  void register() {
+  void register() async{
     //todo : register , navigate to home  screen
-    if (formKey.currentState?.validate() == true) {}
+    if (formKey.currentState?.validate() == true) {
+      try {
+        final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        ToastUtils.toastMsg(
+            msg: 'register successfully.',
+            backgroundColor: Theme.of(context).cardColor,
+            textColor: AppColors.whiteColor,
+            gravity:ToastGravity.BOTTOM);
+        print('id : ${credential.user?.uid}');
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          ToastUtils.toastMsg(
+              msg: 'The password provided is too weak.',
+              backgroundColor: AppColors.redColor,
+              textColor: AppColors.whiteColor,
+              gravity:ToastGravity.BOTTOM);
+        } else if (e.code == 'email-already-in-use') {
+          ToastUtils.toastMsg(
+              msg: 'The account already exists for that email.',
+              backgroundColor: AppColors.redColor,
+              textColor: AppColors.whiteColor,
+              gravity:ToastGravity.BOTTOM);
+        }else if (e.code == 'network-request-failed') {
+          ToastUtils.toastMsg(
+              msg: 'No internet connection.',
+              backgroundColor: AppColors.redColor,
+              textColor: AppColors.whiteColor
+          ,gravity:ToastGravity.BOTTOM
+          );
+        }
+      } catch (e) {
+        ToastUtils.toastMsg(
+            msg: e.toString(),
+            backgroundColor: AppColors.redColor,
+            textColor: AppColors.whiteColor,
+            gravity:ToastGravity.BOTTOM);
+      }
+    }
   }
 }

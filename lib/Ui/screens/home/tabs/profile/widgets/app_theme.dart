@@ -15,6 +15,10 @@ class AppTheme {
     cardColor: AppColors.mainLightColor,
     dividerColor: AppColors.strokeWhiteColor,
     highlightColor: AppColors.whiteColor,
+      appBarTheme: AppBarThemeData(
+          backgroundColor: AppColors.transparent,
+        centerTitle: true
+      ),
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: AppColors.lightBgColor
     ),
@@ -48,8 +52,13 @@ class AppTheme {
     cardColor: AppColors.mainDarkColor,
     dividerColor: AppColors.mainLightColor,
     highlightColor: AppColors.darkInputColor,
+    appBarTheme: AppBarThemeData(
+      backgroundColor: AppColors.transparent,
+      centerTitle: true
+
+    ),
     bottomSheetTheme: BottomSheetThemeData(
-        backgroundColor: AppColors.darkBgColor
+        backgroundColor: AppColors.darkBgColor,
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: AppColors.mainDarkColor,

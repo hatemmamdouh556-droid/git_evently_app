@@ -28,7 +28,7 @@
     "all" : "All",
     "birthday" : "Birthday",
     "welcome_Back" : "Welcome Back ✨",
-    "meeting" : "’Meeting",
+    "meeting" : "Meeting",
     "book_club" : "Book Club",
     "exhibition" : "’Exhibition",
     "search_event" : "Search Event",
@@ -44,6 +44,15 @@
     "introDesc3": "Take the hassle out of organizing events with our all-in-one planning tools. From setting up invites and managing RSVPs to scheduling reminders and coordinating details, we've got you covered. Plan with ease and focus on what matters – creating an unforgettable experience for you and your guests.",
     "introDesc4": "Make every event memorable by sharing the experience with others. Our platform lets you invite friends, keep everyone in the loop, and celebrate moments together. Capture and share the excitement with your network, so you can relive the highlights and cherish the memories.",
     "sign_up_with_google" : "Sign up with Google",
+    "add_event" : "Add Event",
+    "title" : "Title",
+    "event_title" : "Event Title",
+    "description" : "Description",
+    "event_description" : "Event Description....",
+    "event_date" : "Event Date",
+    "event_time" : "Event Time",
+    "choose_date" : "Choose date",
+    "choose_time" : "Choose time",
     "meeting_for_updating_the_development_method" : "Meeting for Updating The Development Method "
 
 

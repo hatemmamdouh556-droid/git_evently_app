@@ -3,6 +3,7 @@ import 'package:evently_project/Ui/screens/home/tabs/home/home_tab.dart';
 import 'package:evently_project/Ui/screens/home/tabs/profile/profile_tab.dart';
 import 'package:evently_project/l10n/app_localizations.dart';
 import 'package:evently_project/utils/AppColors.dart';
+import 'package:evently_project/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 class HomeScreen extends StatefulWidget {
   @override
@@ -54,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       floatingActionButton: FloatingActionButton(onPressed: (){
         //todo : navigate to add event screen
+        Navigator.of(context).pushNamed(AppRoutes.addEventRouteNamed);
       },
         child: Icon(Icons.add,color: AppColors.whiteColor,size: 25,),
       ),
