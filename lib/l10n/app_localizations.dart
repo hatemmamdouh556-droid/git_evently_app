@@ -422,6 +422,24 @@ abstract class AppLocalizations {
   /// **'Choose time'**
   String get choose_time;
 
+  /// No description provided for @update_event.
+  ///
+  /// In en, this message translates to:
+  /// **'Update event'**
+  String get update_event;
+
+  /// No description provided for @no_event_found.
+  ///
+  /// In en, this message translates to:
+  /// **'No Event Found'**
+  String get no_event_found;
+
+  /// No description provided for @no_favorite_event_found.
+  ///
+  /// In en, this message translates to:
+  /// **'No Favorite Event Found'**
+  String get no_favorite_event_found;
+
   /// No description provided for @meeting_for_updating_the_development_method.
   ///
   /// In en, this message translates to:

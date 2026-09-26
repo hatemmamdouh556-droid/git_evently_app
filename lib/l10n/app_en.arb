@@ -53,6 +53,9 @@
     "event_time" : "Event Time",
     "choose_date" : "Choose date",
     "choose_time" : "Choose time",
+    "update_event" : "Update event",
+    "no_event_found" : "No Event Found",
+    "no_favorite_event_found" : "No Favorite Event Found",
     "meeting_for_updating_the_development_method" : "Meeting for Updating The Development Method "
 
 

@@ -17,14 +17,15 @@ import 'package:evently_project/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AddEventScreen extends StatefulWidget {
-  AddEventScreen({super.key});
+class EditScreen extends StatefulWidget {
+  final Event event;
+  EditScreen({super.key,required this.event});
 
   @override
-  State<AddEventScreen> createState() => _AddEventScreenState();
+  State<EditScreen> createState() => _EditScreenState();
 }
 
-class _AddEventScreenState extends State<AddEventScreen> {
+class _EditScreenState extends State<EditScreen> {
   List<String> eventImageDark = [
     AppAssets.sportDark,
     AppAssets.birthdayDark,
@@ -45,6 +46,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
   int selectedIndex = 0;
   var formKey = GlobalKey<FormState>();
+  late TextEditingController titleController;
+  late TextEditingController descriptionController;
   String title = '';
   String description = '';
   DateTime? selectedDate ;
@@ -55,10 +58,32 @@ class _AddEventScreenState extends State<AddEventScreen> {
   String selectedEventImage ='' ;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    titleController = TextEditingController(text: widget.event.eventTitle);
+    descriptionController = TextEditingController(text: widget.event.eventDescription);
+    title = widget.event.eventTitle;
+    description = widget.event.eventDescription;
+    selectedDate = widget.event.eventDate;
+    selectedTime = TimeOfDay.fromDateTime(widget.event.eventDate);
+    selectedIndex = widget.event.eventCategoryIndex - 1;
+    formatDate = DateFormat('dd/MM/yyyy').format(selectedDate!);
+
+  }
+  @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var height = context.height;
     var width = context.width;
     var themeProvider = Provider.of<AppThemeProvider>(context);
+    formatTime = selectedTime!.format(context);
     List<String> eventNameList = [
       AppLocalizations.of(context)!.sport,
       AppLocalizations.of(context)!.birthday,
@@ -66,16 +91,15 @@ class _AddEventScreenState extends State<AddEventScreen> {
       AppLocalizations.of(context)!.book_club,
       AppLocalizations.of(context)!.exhibition,
     ];
-    selectedEventName =eventNameList[selectedIndex];
     selectedEventImage = themeProvider.isDark ?
-        eventImageDark[selectedIndex]:
-        eventImageLight[selectedIndex];
+    eventImageDark[selectedIndex]:
+    eventImageLight[selectedIndex];
 
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context)!.add_event,
+          AppLocalizations.of(context)!.update_event,
           style: Theme.of(context).textTheme.titleSmall,
         ),
         leading: Padding(
@@ -129,7 +153,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     image: DecorationImage(
                       fit: BoxFit.fill,
                       image: AssetImage(
-                        selectedEventImage
+                          selectedEventImage
 
                       ),
                     ),
@@ -162,9 +186,11 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 CustomTextField(
+                  controller: titleController,
+                  style: Theme.of(context).textTheme.bodySmall,
                   filled: true,
                   fillColor: Theme.of(context).highlightColor,
-                  hintText: AppLocalizations.of(context)!.event_title,
+                  hintText: AppLocalizations.of(context)!.title,
                   hintStyle: Theme.of(context).textTheme.bodyLarge,
                   onChange: (text) {
                     title = text;
@@ -181,10 +207,13 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 CustomTextField(
+                  controller: descriptionController,
+                  style: Theme.of(context).textTheme.bodySmall,
                   filled: true,
                   fillColor: Theme.of(context).highlightColor,
-                  hintText: AppLocalizations.of(context)!.event_description,
+                  hintText: AppLocalizations.of(context)!.description,
                   hintStyle: Theme.of(context).textTheme.bodyLarge,
+
                   maxLines: 3,
                   onChange: (text) {
                     description = text;
@@ -222,9 +251,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   onPressed: chooseTime,
                 ),
                 CustomElevatedBotton(
-                  onPressed: addEvent,
+                  onPressed: updateEvent,
                   child: Text(
-                    AppLocalizations.of(context)!.add_event,
+                    AppLocalizations.of(context)!.update_event,
                     style: AppStyles.medium20WhiteDarkColor,
                   ),
                 ),
@@ -234,40 +263,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
         ),
       ),
     );
-  }
-
-  void addEvent() {
-    if (formKey.currentState?.validate() == true) {
-      //todo : add event to firestore
-      Event event =Event(
-          eventImage: selectedEventImage,
-          eventCategoryIndex: selectedIndex +1,
-          eventName: selectedEventName,
-          eventTitle: title,
-          eventDescription: description,
-          eventDate: DateTime(selectedDate!.year,selectedDate!.month
-              ,selectedDate!.day,selectedTime!.hour,selectedTime!.minute)
-      );
-      //todo :Future => Success => listen => then() online, timeOut () offline
-      //todo :Future  => Error  listen => catchError() => onError()
-
-      FirebaseUtils.addEventToFireStore(event).then((value){
-        ToastUtils.toastMsg(
-        msg: 'Event added successfully.',
-        backgroundColor: Theme.of(context).cardColor,
-        textColor: AppColors.whiteColor);
-        //todo : back to home screen (pop)
-        Navigator.pop(context);
-      },)
-          .catchError((error) {
-        ToastUtils.toastMsg(
-            msg: error.toString(),
-            backgroundColor: AppColors.redColor,
-            textColor: AppColors.whiteColor);
-
-          },
-      );
-    }
   }
 
   void chooseDate() async{
@@ -297,5 +292,34 @@ class _AddEventScreenState extends State<AddEventScreen> {
     setState(() {
 
     });
+  }
+  void updateEvent(){
+    if (formKey.currentState?.validate() == true){
+      Event updateEvent =Event(
+          id: widget.event.id,
+          eventImage: selectedEventImage,
+          eventName: widget.event.eventName,
+          eventTitle: titleController.text,
+          eventDescription: descriptionController.text,
+          eventDate: DateTime(
+            selectedDate!.year, selectedDate!.month, selectedDate!.day,
+            selectedTime!.hour, selectedTime!.minute,
+          ),
+          isFavorite: widget.event.isFavorite,
+          eventCategoryIndex: selectedIndex + 1);
+      FirebaseUtils.updateEvent(updateEvent).then((Value){
+        ToastUtils.toastMsg(
+          msg: 'Event updated successfully.',
+          backgroundColor: Theme.of(context).cardColor,
+          textColor: AppColors.whiteColor,);
+        Navigator.pop(context);
+      }).catchError((error) {
+        ToastUtils.toastMsg(
+          msg: error.toString(),
+          backgroundColor: AppColors.redColor,
+          textColor: AppColors.whiteColor,);
+      });
+
+    }
   }
 }

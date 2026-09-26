@@ -4,4 +4,5 @@ class AppRoutes {
   static const String loginRouteNamed= "login_screen";
   static const String registerRouteNamed= "register_screen";
   static const String addEventRouteNamed= "add_event_screen";
+  static const String detailsRouteNamed= "details_screen";
 }

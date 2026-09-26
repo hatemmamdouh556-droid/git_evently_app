@@ -49,6 +49,7 @@ dependencies:
   # add this line to your dependencies
   fluttertoast: ^10.0.0
   firebase_auth: ^6.7.0
+  google_sign_in: ^6.2.2
 
 dev_dependencies:
   flutter_test:

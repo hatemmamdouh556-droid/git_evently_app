@@ -10,6 +10,7 @@ class Event {
   String eventName ;
   String eventTitle ;
   String eventDescription ;
+  int eventCategoryIndex;
   DateTime eventDate  ;
   bool isFavorite;
   Event({
@@ -19,6 +20,8 @@ class Event {
   required this.eventTitle,
   required this.eventDescription,
   required this.eventDate,
+    required this.eventCategoryIndex,
+
     this.isFavorite = false,
 });
   //todo : json => object
@@ -28,6 +31,7 @@ class Event {
     eventImage: data['event_image'],
     eventTitle: data['event_title'],
     eventDescription: data['event_Description'],
+    eventCategoryIndex: data['event_category_index'],
     eventDate:(data ['event_date'] as Timestamp).toDate(),
     isFavorite: data['event_isFavorite'],
   );
@@ -40,6 +44,7 @@ class Event {
       'event_Description' : eventDescription,
       'event_image' : eventImage,
       'event_date' : eventDate,
+      'event_category_index' : eventCategoryIndex,
       'event_isFavorite' : isFavorite,
     };
   }

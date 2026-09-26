@@ -4,9 +4,12 @@ import 'package:evently_project/Ui/screens/home/tabs/profile/widgets/theme/theme
 import 'package:evently_project/l10n/app_localizations.dart';
 import 'package:evently_project/providers/app_language_provider.dart';
 import 'package:evently_project/providers/app_theme_provider.dart';
+import 'package:evently_project/providers/user_provider.dart';
 import 'package:evently_project/utils/AppAssets.dart';
 import 'package:evently_project/utils/AppColors.dart';
+import 'package:evently_project/utils/app_routes.dart';
 import 'package:evently_project/utils/size_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +27,7 @@ class _ProfileTabState extends State<ProfileTab> {
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<AppLanguageProvider>(context);
     var themeProvider = Provider.of<AppThemeProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
     var height = context.height;
     var width = context.width;
     return Padding(
@@ -40,9 +44,9 @@ class _ProfileTabState extends State<ProfileTab> {
               radius: 50,
               backgroundImage: AssetImage(AppAssets.logoRouteImage),
             ),
-            Text("Route Academy",
+            Text(userProvider.currentUser!.name,
             style: Theme.of(context).textTheme.headlineLarge,),
-            Text("routeacademy@gmail.com",
+            Text(userProvider.currentUser!.email,
             style: Theme.of(context).textTheme.bodyLarge,),
             SizedBox(height: height*0.01,),
             AppConfigItem(text:AppLocalizations.of(context)!.dark_mode,
@@ -70,6 +74,13 @@ class _ProfileTabState extends State<ProfileTab> {
               text:AppLocalizations.of(context)!.logout,
               icon:IconButton(
                 onPressed: (){
+                  //todo:signOut
+                  ///FirebaseAuth.instance.signOut();
+                  //todo :logout
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                  AppRoutes.loginRouteNamed,
+                  (route) => false,
+                  );
 
                 },
                 icon: Icon(Icons.logout,color: AppColors.redColor)

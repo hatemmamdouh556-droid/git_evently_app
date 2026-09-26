@@ -176,6 +176,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get choose_time => 'ختر الوقت';
 
   @override
+  String get update_event => 'تحديث الحدث';
+
+  @override
+  String get no_event_found => 'لم يتم العثور على أي حدث';
+
+  @override
+  String get no_favorite_event_found => 'لم يتم العثور على حدث مفضل';
+
+  @override
   String get meeting_for_updating_the_development_method =>
       'اجتماع لتحديث منهجية التطوير';
 }

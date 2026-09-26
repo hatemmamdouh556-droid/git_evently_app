@@ -1,11 +1,16 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:evently_project/Ui/screens/home/home_screen.dart';
 import 'package:evently_project/Ui/widgets/custom_elevated_botton.dart';
 import 'package:evently_project/Ui/widgets/custom_text_field.dart';
+import 'package:evently_project/firebase_utils.dart';
 import 'package:evently_project/l10n/app_localizations.dart';
 import 'package:evently_project/providers/app_theme_provider.dart';
+import 'package:evently_project/providers/user_provider.dart';
 import 'package:evently_project/utils/AppAssets.dart';
 import 'package:evently_project/utils/AppColors.dart';
 import 'package:evently_project/utils/AppStyles.dart';
 import 'package:evently_project/utils/app_routes.dart';
+import 'package:evently_project/utils/main_loading_widget.dart';
 import 'package:evently_project/utils/size_utils.dart';
 import 'package:evently_project/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
@@ -14,18 +19,19 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
-   LoginScreen({super.key});
+  LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-   var  emailController = TextEditingController(text: 'hatem@gmail.com');
+  var emailController = TextEditingController(text: 'hatem@gmail.com');
 
-   var  passwordController = TextEditingController(text: '123456');
+  var passwordController = TextEditingController(text: '123456');
 
-   var formKey = GlobalKey<FormState>();
+  var formKey = GlobalKey<FormState>();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -63,18 +69,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
-                    validator: (text){
-                      if(text == null || text.trim().isEmpty ){
+                    validator: (text) {
+                      if (text == null || text.trim().isEmpty) {
                         return 'Please enter email';
                       }
-                      final bool emailValid =
-                      RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                          .hasMatch(text);
+                      final bool emailValid = RegExp(
+                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                      ).hasMatch(text);
 
-                      if(!emailValid){
+                      if (!emailValid) {
                         return 'please Enter valid email.';
                       }
-                      return null ;
+                      return null;
                     },
                   ),
                   CustomTextField(
@@ -92,14 +98,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     keyboardType: TextInputType.number,
                     controller: passwordController,
                     obscureText: true,
-                    validator: (text){
-                      if(text == null || text.trim().isEmpty ){
+                    validator: (text) {
+                      if (text == null || text.trim().isEmpty) {
                         return 'Please enter password';
                       }
-                      if(text.length < 6){
+                      if (text.length < 6) {
                         return 'password should be at least 6 chars';
                       }
-                      return null ;
+                      return null;
                     },
                   ),
                   Row(
@@ -111,75 +117,105 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         child: Text(
                           '${AppLocalizations.of(context)!.forget_password} ? ',
-                          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            decoration: TextDecoration.underline,
-                            decorationColor: Theme.of(context).dividerColor,
-                          ),
+                          style: Theme.of(context).textTheme.labelLarge
+                              ?.copyWith(
+                                decoration: TextDecoration.underline,
+                                decorationColor: Theme.of(context).dividerColor,
+                              ),
                         ),
                       ),
                     ],
                   ),
                   CustomElevatedBotton(
-                    onPressed: (){
+                    onPressed: () {
+                      login();
+
                       ///Navigator.of(context).pushNamed(AppRoutes.homeRouteNamed);
                     },
-                    child: Text(
-                      AppLocalizations.of(context)!.login,
-                      style: AppStyles.medium20WhiteDarkColor,
-                    ),
+                    child: isLoading
+                        ? MainLoadingWidget()
+                        : Text(
+                            AppLocalizations.of(context)!.login,
+                            style: AppStyles.medium20WhiteDarkColor,
+                          ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                    Text(AppLocalizations.of(context)!.don_t_have_an_account,
-                    style: Theme.of(context).textTheme.bodyLarge,),
-                    TextButton(
-                      onPressed: () {
-                        //todo : navigate to register screen
-                        Navigator.of(context).pushNamed(AppRoutes.registerRouteNamed);
-                      },
-                      child: Text(AppLocalizations.of(context)!.sign_up,
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          decoration: TextDecoration.underline,
-                          decorationColor: Theme.of(context).cardColor,
+                      Text(
+                        AppLocalizations.of(context)!.don_t_have_an_account,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          //todo : navigate to register screen
+                          Navigator.of(context)
+                              .pushNamed(AppRoutes.registerRouteNamed);
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!.sign_up,
+                          style: Theme.of(context).textTheme.labelLarge
+                              ?.copyWith(
+                                decoration: TextDecoration.underline,
+                                decorationColor: Theme.of(context).cardColor,
+                              ),
                         ),
                       ),
-                    ),
-                  ],),
+                    ],
+                  ),
                   Row(
                     children: [
                       Expanded(
                         child: Divider(
                           color: Theme.of(context).dividerColor,
                           thickness: 2,
-                          indent: width*0.02,
-                          endIndent: width*0.06,
+                          indent: width * 0.02,
+                          endIndent: width * 0.06,
                         ),
                       ),
-                      Text(AppLocalizations.of(context)!.or,
-                      style: Theme.of(context).textTheme.labelMedium,),
+                      Text(
+                        AppLocalizations.of(context)!.or,
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
                       Expanded(
                         child: Divider(
                           color: Theme.of(context).dividerColor,
                           thickness: 2,
-                          indent: width*0.06,
-                          endIndent: width*0.02,
-
+                          indent: width * 0.06,
+                          endIndent: width * 0.02,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: height*0.01,),
+                  SizedBox(height: height * 0.01),
                   CustomElevatedBotton(
-                    onPressed: (){
+                    onPressed: () async {
                       //todo : login with google
+                      User? user = await FirebaseUtils.signInWithGoogle();
+                      if (user != null) {
+                        var myUser = await FirebaseUtils.readUserFromFireStore(user.uid);
+                        if (myUser != null) {
+                          var userProvider = Provider.of<UserProvider>(context, listen: false);
+                          userProvider.updateUser(myUser);
+                        }
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                        );
+                      } else {
+                        ToastUtils.toastMsg(
+                          msg: 'Sign in failed or cancelled',
+                          backgroundColor: AppColors.redColor,
+                          textColor: AppColors.whiteColor,
+                        );
+                      }
                     },
                     borderColor: Theme.of(context).dividerColor,
-                    padding: height*0.02,
+                    padding: height * 0.02,
                     backgroundColor: Theme.of(context).highlightColor,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: width*0.04,
+                      spacing: width * 0.04,
                       children: [
                         Image.asset(AppAssets.googleLogo),
                         Text(
@@ -198,41 +234,66 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void login()async {
+  void login() async {
     //todo : login , navigate to home  screen
-    if(formKey.currentState?.validate() == true){
+    if (formKey.currentState?.validate() == true) {
       try {
-        final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: emailController.text,
-            password: passwordController.text
+        setState(() {});
+        //todo : isLoading = true
+        isLoading = true;
+        //todo : authentication
+        final credential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+              email: emailController.text,
+              password: passwordController.text,
+            );
+        //todo: read data fireStore
+        var user = await FirebaseUtils.readUserFromFireStore(
+          credential.user?.uid ?? '',
         );
+        if (user == null) {
+          return;
+        }
+        //todo :save in Provider
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.updateUser(user);
+        //todo toast => success
+        isLoading = false;
         ToastUtils.toastMsg(
-            msg: 'login successfully.',
-            backgroundColor: Theme.of(context).cardColor,
-            textColor: AppColors.whiteColor,
-            gravity:ToastGravity.BOTTOM);
-
+          msg: 'login successfully.',
+          backgroundColor: Theme.of(context).cardColor,
+          textColor: AppColors.whiteColor,
+          gravity: ToastGravity.BOTTOM,
+        );
+        //todo : navigate to home screen
+        Navigator.of(context).pushReplacementNamed(AppRoutes.homeRouteNamed);
       } on FirebaseAuthException catch (e) {
+        isLoading = false;
         if (e.code == 'invalid-credential') {
           ToastUtils.toastMsg(
-              msg: 'the email or password is incorrect.',
-              backgroundColor: AppColors.redColor,
-              textColor: AppColors.whiteColor,
-              gravity:ToastGravity.BOTTOM);
-        } else if (e.code == 'network-request-failed') {
-          ToastUtils.toastMsg(
-              msg: 'No internet connection.',
-              backgroundColor: AppColors.redColor,
-              textColor: AppColors.whiteColor,
-              gravity:ToastGravity.BOTTOM);
-        }
-      }catch(e){
-        ToastUtils.toastMsg(
-            msg: e.toString(),
+            msg: 'the email or password is incorrect.',
             backgroundColor: AppColors.redColor,
             textColor: AppColors.whiteColor,
-            gravity:ToastGravity.BOTTOM);
+            gravity: ToastGravity.BOTTOM,
+          );
+        } else if (e.code == 'network-request-failed') {
+          isLoading = false;
+          ToastUtils.toastMsg(
+            msg: 'No internet connection.',
+            backgroundColor: AppColors.redColor,
+            textColor: AppColors.whiteColor,
+            gravity: ToastGravity.BOTTOM,
+          );
+        }
+      } catch (e) {
+        isLoading = false;
+        ToastUtils.toastMsg(
+          msg: e.toString(),
+          backgroundColor: AppColors.redColor,
+          textColor: AppColors.whiteColor,
+          gravity: ToastGravity.BOTTOM,
+        );
       }
     }
-}
+  }
 }

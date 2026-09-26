@@ -53,6 +53,9 @@
       "event_time" : "وقت الفعالية",
       "choose_date" : "اختر التاريخ",
       "choose_time" : "ختر الوقت",
+      "update_event" : "تحديث الحدث",
+      "no_event_found" : "لم يتم العثور على أي حدث",
+      "no_favorite_event_found" : "لم يتم العثور على حدث مفضل",
       "meeting_for_updating_the_development_method" : "اجتماع لتحديث منهجية التطوير"
 
 }

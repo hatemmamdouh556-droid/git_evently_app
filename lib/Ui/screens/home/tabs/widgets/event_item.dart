@@ -1,14 +1,22 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:evently_project/firebase_utils.dart';
+import 'package:evently_project/model/event.dart';
 import 'package:evently_project/providers/app_theme_provider.dart';
 import 'package:evently_project/utils/AppAssets.dart';
+import 'package:evently_project/utils/AppColors.dart';
+import 'package:evently_project/utils/EventImageHelper.dart';
 import 'package:evently_project/utils/size_utils.dart';
+import 'package:evently_project/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class EventItem extends StatelessWidget {
-  const EventItem({super.key});
+  final Event event;
+   EventItem({super.key,required this.event});
 
   @override
   Widget build(BuildContext context) {
+
     var height = context.height;
     var width = context.width;
     var themeProvider = Provider.of<AppThemeProvider>(context);
@@ -26,9 +34,7 @@ class EventItem extends StatelessWidget {
         image: DecorationImage(
           fit: BoxFit.fill,
           image: AssetImage(
-            themeProvider.isDark
-                ? AppAssets.birthdayDark
-                : AppAssets.birthdayLight,
+              EventImageHelper.getImage(context, event.eventCategoryIndex)
           ),
         ),
       ),
@@ -45,7 +51,9 @@ class EventItem extends StatelessWidget {
           color: Theme.of(context).highlightColor,
       borderRadius: BorderRadius.circular(8),
       border: Border.all(width: 2, color: Theme.of(context).dividerColor),),
-        child: Text("21 Jen",
+        child: Text(DateFormat('dd MMM').format(
+          event.eventDate
+        ).toString(),
         style: Theme.of(context).textTheme.bodyMedium,),
       ),
       Container(
@@ -60,12 +68,28 @@ class EventItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Text("This is a Birthday Party ",
+              child: Text(event.eventTitle,
               style: Theme.of(context).textTheme.bodySmall,),
             ),
             IconButton(onPressed: (){
               //todo : add to favorite
-            }, icon: Icon(Icons.favorite_outline,size: 25 ,color: Theme.of(context).cardColor,))
+              FirebaseUtils.updateIsFavorite(event).then((value) {
+                ToastUtils.toastMsg(
+                    msg: 'Event update successfully.',
+                    backgroundColor: AppColors.greenColor,
+                    textColor: AppColors.whiteColor);
+
+              },)
+              .catchError((error){
+                ToastUtils.toastMsg(
+                    msg: error.toString(),
+                    backgroundColor: AppColors.redColor,
+                    textColor: AppColors.whiteColor);
+              });
+            }, icon: Icon(event.isFavorite?
+                Icons.favorite
+                :
+              Icons.favorite_outline,size: 25 ,color: Theme.of(context).cardColor,))
           ],
         ),
       ),

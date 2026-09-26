@@ -9,6 +9,7 @@ import 'package:evently_project/firebase_options.dart';
 import 'package:evently_project/l10n/app_localizations.dart';
 import 'package:evently_project/providers/app_language_provider.dart';
 import 'package:evently_project/providers/app_theme_provider.dart';
+import 'package:evently_project/providers/user_provider.dart';
 import 'package:evently_project/utils/app_routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -24,7 +25,8 @@ void main()async{
   runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) =>AppLanguageProvider() ,),
-        ChangeNotifierProvider(create: (context) => AppThemeProvider(),)
+        ChangeNotifierProvider(create: (context) => AppThemeProvider(),),
+        ChangeNotifierProvider(create: (context) => UserProvider(),),
       ],
       child: MyApp()));
 }
@@ -43,9 +45,6 @@ class MyApp extends StatelessWidget{
         AppRoutes.loginRouteNamed : (context) => LoginScreen(),
         AppRoutes.registerRouteNamed : (context) => RegisterScreen(),
         AppRoutes.addEventRouteNamed : (context) => AddEventScreen(),
-
-
-
       },
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales ,
